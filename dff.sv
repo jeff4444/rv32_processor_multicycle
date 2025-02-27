@@ -1,6 +1,7 @@
 module dff (
     input clk,
     input resetn,
+    input write,
     input [31:0] next,
     output logic [31:0] prev
 );
@@ -9,7 +10,9 @@ module dff (
         if (!resetn) begin
             prev <= 32'h0;
         end else begin
-            prev <= next;
+            if (write)
+                prev <= next;
+            else
         end
     end
     

@@ -1,4 +1,4 @@
-module mux_32 (
+module mux_2_to_1 (
     input [31:0] op1,
     input [31:0] op2,
     input sel,

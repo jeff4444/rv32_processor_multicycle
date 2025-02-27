@@ -8,7 +8,4 @@ module alu_control (
     assign alu_op[1] = alu_op_sel[0] | ~instruction[14] | ~alu_op_sel[1];
     assign alu_op[0] = alu_op_sel[1] & instruction[13] & ~instruction[12];
 
-    // always @ (*) begin
-    //     $display("instruction: %h, instruction[14]: %b, alu_sel_op: %b", instruction, instruction[14], alu_op_sel);
-    // end
 endmodule

@@ -1,15 +1,22 @@
-module intruction_memory (
+module memory (
     input clk,
     input resetn,
+    input memRead,
+    input memWrite,
+    input [31:0] writeData,
     input [31:0] address,
-    output [31:0] instruction 
+    output [31:0] memData,
 );
-
+    // instruction memory where instructions are stored in [0:55]
     reg [7:0] mem [0:1023];
 
     // dummy instructions
     always @ (posedge clk) begin
         if (!resetn) begin
+            for (integer i = 0; i < 1024; i++) begin
+                mem[i] <= 0;
+            end
+            // initialize 14 instructions
             mem[0] <= 8'h83;
             mem[1] <= 8'h20;
             mem[2] <= 8'h00;
@@ -67,10 +74,17 @@ module intruction_memory (
             mem[54] <= 8'h95;
             mem[55] <= 8'h00;
 
+        end else begin
+            if (memWrite) begin
+                mem[address] <= writeData[7:0];
+                mem[address + 1] <= writeData[15:8];
+                mem[address + 2] <= writeData[23:16];
+                mem[address + 3] <= writeData[31:24];
+            end
+            if (memRead) begin
+                memData <= {mem[address + 3], mem[address + 2], mem[address + 1], mem[address]};
+            end
         end
-    end
-
-
-    assign instruction = {mem[address+3], mem[address+2], mem[address+1], mem[address]};
-    
+    end 
+  
 endmodule

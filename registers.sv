@@ -5,16 +5,18 @@ module registers (
     input [4:0] readReg2,
     input [4:0] writeReg,
     input [31:0] writeData,
+    input regWrite
     output [31:0] readData1,
     output [31:0] readData2,
-    input regWrite
 );
 
     reg [31:0] regFile [31:0];
 
     always @(posedge clk) begin
         if (!resetn) begin
-            regFile[0] <= 32'h0;
+            for (integer i = 0; i < 32; i++) begin
+                regFile[i] <= 0;
+            end
         end else begin
             if (regWrite) begin
                 if (writeReg != 0) begin
