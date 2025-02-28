@@ -5,9 +5,9 @@ module registers (
     input [4:0] readReg2,
     input [4:0] writeReg,
     input [31:0] writeData,
-    input regWrite
+    input regWrite,
     output [31:0] readData1,
-    output [31:0] readData2,
+    output [31:0] readData2
 );
 
     reg [31:0] regFile [31:0];

@@ -5,7 +5,7 @@ module memory (
     input memWrite,
     input [31:0] writeData,
     input [31:0] address,
-    output [31:0] memData,
+    output logic [31:0] memData
 );
     // instruction memory where instructions are stored in [0:55]
     reg [7:0] mem [0:1023];

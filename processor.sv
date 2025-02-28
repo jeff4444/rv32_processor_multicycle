@@ -1,6 +1,6 @@
 module multicycle_rv32_processor (
     input clk,
-    input resetn,
+    input resetn
 );
     wire PCWriteCond;
     wire PCWrite;
@@ -40,6 +40,7 @@ module multicycle_rv32_processor (
 
     wire [31:0] ALUIn1;
     wire [31:0] ALUIn2;
+    wire [3:0] alu_op;
 
 
     assign pcWriteReg = (zero & PCWriteCond) | PCWrite;
@@ -65,7 +66,7 @@ module multicycle_rv32_processor (
         .memRead(MemRead),
         .memWrite(MemWrite),
         .writeData(prevReg2Data),
-        .address(memAddress)
+        .address(memAddress),
         .memData(memData)
     );
 
@@ -81,7 +82,7 @@ module multicycle_rv32_processor (
     dff memDataReg (
         .clk(clk),
         .resetn(resetn),
-        .write(1),
+        .write(1'b1),
         .next(memData),
         .prev(prevMemData)
     );
@@ -99,14 +100,14 @@ module multicycle_rv32_processor (
         .IRWrite(IRWrite),
         .PCSource(PCSource),
         .ALUSrcA(ALUSrcA),
-        .ALUSrcB(ALUSrcB).
+        .ALUSrcB(ALUSrcB),
         .ALUOp(ALUOp),
         .RegWrite(RegWrite)
     );
 
     mux_2_to_1 mux2 (
         .op1(ALUResPrev),
-        .op2(currMemData),
+        .op2(prevMemData),
         .sel(MemtoReg),
         .out(regWriteData)
     );
@@ -126,7 +127,7 @@ module multicycle_rv32_processor (
     dff A (
         .clk(clk),
         .resetn(resetn),
-        .write(1),
+        .write(1'b1),
         .next(curReg1Data),
         .prev(prevReg1Data)
     );
@@ -141,7 +142,7 @@ module multicycle_rv32_processor (
     dff B (
         .clk(clk),
         .resetn(resetn),
-        .write(1),
+        .write(1'b1),
         .next(curReg2Data),
         .prev(prevReg2Data)
     );
@@ -153,7 +154,7 @@ module multicycle_rv32_processor (
 
     mux_4_to_1 mux4 (
         .in0(prevReg2Data),
-        .in1(4),
+        .in1(32'h4),
         .in2(immediate),
         .in3(0),
         .sel(ALUSrcB),
@@ -163,7 +164,7 @@ module multicycle_rv32_processor (
     alu ALU (
         .op1(ALUIn1),
         .op2(ALUIn2),
-        .alu_op(ALUOp),
+        .alu_op(alu_op),
         .result(ALURes),
         .zero(zero)
     );
@@ -171,7 +172,7 @@ module multicycle_rv32_processor (
     dff ALUOut (
         .clk(clk),
         .resetn(resetn),
-        .write(1),
+        .write(1'b1),
         .next(ALURes),
         .prev(ALUResPrev)
     );
@@ -181,6 +182,12 @@ module multicycle_rv32_processor (
         .op2(ALUResPrev),
         .sel(PCSource),
         .out(pcNext)
+    );
+
+    alu_control aluCtrl (
+        .instruction(instruction),
+        .alu_op_sel(ALUOp),
+        .alu_op(alu_op)
     );
 
     

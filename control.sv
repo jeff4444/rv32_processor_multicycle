@@ -2,18 +2,18 @@ module control (
     input clk,
     input resetn,
     input [6:0] opcode,
-    output PCWriteCond,
-    output PCWrite,
-    output IorD,
-    output MemRead,
-    output MemWrite,
-    output MemtoReg,
-    output IRWrite,
-    output PCSource,
-    output ALUSrcA,
-    output [1:0] ALUSrcB,
-    output [1:0] ALUOp,
-    output RegWrite,
+    output logic PCWriteCond,
+    output logic PCWrite,
+    output logic IorD,
+    output logic MemRead,
+    output logic MemWrite,
+    output logic MemtoReg,
+    output logic IRWrite,
+    output logic PCSource,
+    output logic ALUSrcA,
+    output logic [1:0] ALUSrcB,
+    output logic [1:0] ALUOp,
+    output logic RegWrite
 );
     reg [3:0] cur_state, next_state;
 
@@ -73,7 +73,7 @@ module control (
     always @(posedge clk) begin
         case (cur_state)
             4'b0000: begin
-                memRead <= 1;
+                MemRead <= 1;
                 ALUSrcA <= 0;
                 IorD <= 0;
                 IRWrite <= 1;
@@ -87,7 +87,7 @@ module control (
                 PCSource <= 0;
             end
             4'b0001: begin
-                memRead <= 0;
+                MemRead <= 0;
                 ALUSrcA <= 0;
                 IorD <= 0;
                 IRWrite <= 0;
@@ -101,7 +101,7 @@ module control (
                 PCSource <= 0;
             end
             4'b0010: begin
-                memRead <= 0;
+                MemRead <= 0;
                 ALUSrcA <= 1;
                 IorD <= 0;
                 IRWrite <= 0;
@@ -115,7 +115,7 @@ module control (
                 PCSource <= 0;
             end
             4'b0011: begin
-                memRead <= 1;
+                MemRead <= 1;
                 ALUSrcA <= 0;
                 IorD <= 1;
                 IRWrite <= 0;
@@ -129,7 +129,7 @@ module control (
                 PCSource <= 0;
             end
             4'b0100: begin
-                memRead <= 0;
+                MemRead <= 0;
                 ALUSrcA <= 0;
                 IorD <= 0;
                 IRWrite <= 0;
@@ -143,7 +143,7 @@ module control (
                 PCSource <= 0;
             end
             4'b0101: begin
-                memRead <= 0;
+                MemRead <= 0;
                 ALUSrcA <= 0;
                 IorD <= 1;
                 IRWrite <= 0;
@@ -157,7 +157,7 @@ module control (
                 PCSource <= 0;
             end
             4'b0110: begin
-                memRead <= 0;
+                MemRead <= 0;
                 ALUSrcA <= 1;
                 IorD <= 0;
                 IRWrite <= 0;
@@ -171,7 +171,7 @@ module control (
                 PCSource <= 0;
             end
             4'b0111: begin
-                memRead <= 0;
+                MemRead <= 0;
                 ALUSrcA <= 0;
                 IorD <= 0;
                 IRWrite <= 0;
@@ -185,7 +185,7 @@ module control (
                 PCSource <= 0;
             end
             4'b1000: begin
-                memRead <= 0;
+                MemRead <= 0;
                 ALUSrcA <= 1;
                 IorD <= 0;
                 IRWrite <= 0;

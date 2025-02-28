@@ -12,7 +12,6 @@ module dff (
         end else begin
             if (write)
                 prev <= next;
-            else
         end
     end
     
